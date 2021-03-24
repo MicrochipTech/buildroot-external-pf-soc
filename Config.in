@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_ICICLE_PATH/package/hart-software-services/Config.in.host"

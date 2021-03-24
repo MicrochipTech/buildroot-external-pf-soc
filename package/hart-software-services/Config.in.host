@@ -1,0 +1,27 @@
+config BR2_PACKAGE_HOST_HART_SOFTWARE_SERVICES
+	bool "Hart Software Services"
+	help
+	  Microchip Hart Software Services package for
+	  PolarFire SOC.
+
+if BR2_PACKAGE_HOST_HART_SOFTWARE_SERVICES
+
+config BR2_PACKAGE_HOST_HSS_PAYLOAD_GENERATOR
+	bool "Payload Generator"
+	help
+	  Microchip PolarFire SOC Payload Generator
+
+if BR2_PACKAGE_HOST_HSS_PAYLOAD_GENERATOR
+
+config BR2_PACKAGE_HOST_HSS_PAYLOAD_GENERATOR_CFG
+	string "Config file path and source location"
+	help
+	  Path to config.yaml file (including config.yaml)
+
+config BR2_PACKAGE_HOST_HSS_PAYLOAD_GENERATOR_SRC
+	string "Payload file path and binary location"
+	help
+	  Path to payload binary file (including file name)
+	  Must match payload file name in config.yaml file
+endif
+endif

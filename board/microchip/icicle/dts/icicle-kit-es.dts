@@ -1,0 +1,3 @@
+icicle-kit-es.o: \
+ /opt/embedded/Linux/fpga/pf-soc-external/board/microchip/icicle/dts/icicle-kit-es.dts \
+ /opt/embedded/Linux/fpga/pf-soc-external/board/microchip/icicle/dts/microchip,pfsoc-clock.h
