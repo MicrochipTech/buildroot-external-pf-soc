@@ -1,0 +1,10 @@
+.br2-external.*.*
+*.tmp
+.br2-external.mk
+.config
+Makefile
+build/
+host/
+images/
+staging
+target/
