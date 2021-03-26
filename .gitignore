@@ -8,3 +8,5 @@ host/
 images/
 staging
 target/
+.config.old
+

@@ -1,0 +1,23 @@
+arch=riscv
+baudrate=115200
+board=mpfs_icicle
+board_name=mpfs_icicle
+loadaddr=0x90000000
+bootcmd=load mmc 0:2 ${loadaddr} fitImage.fit; bootm;
+bootargs=earlyprintk debug console=ttyS0,115200n8 noinitrd root=/dev/mmcblk0p3 rw rootdelay=2 uio_pdrv_genirq.of_id=generic-uio pci-hpmemsize=0M libata.force=noncq
+
+bootdelay=2
+cpu=generic
+
+ethaddr=00:04:a3:73:28:d1
+fdt_addr_r=0x88000000
+fdt_high=0xffffffffffffffff
+fdtcontroladdr=bf786d80
+icicle_mac_addr=[00 04 a3 73 28 d1]
+kernel_addr_r=0x84000000
+stderr=serial@20100000
+stdin=serial@20100000
+stdout=serial@20100000
+vendor=microchip
+
+
