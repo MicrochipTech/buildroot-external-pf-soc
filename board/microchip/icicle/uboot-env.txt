@@ -3,7 +3,7 @@ baudrate=115200
 board=mpfs_icicle
 board_name=mpfs_icicle
 loadaddr=0x90000000
-bootcmd=load mmc 0:2 ${loadaddr} fitImage.fit; bootm;
+bootcmd=load mmc 0:2 ${loadaddr} icicle_kit_es.itb; bootm;
 bootargs=earlyprintk debug console=ttyS0,115200n8 noinitrd root=/dev/mmcblk0p3 rw rootdelay=2 uio_pdrv_genirq.of_id=generic-uio pci-hpmemsize=0M libata.force=noncq
 
 bootdelay=2
