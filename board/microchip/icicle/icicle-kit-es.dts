@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /* Copyright (c) 2019-2020 Microchip Technology Inc */
 /dts-v1/;
-#include "microchip,pfsoc-clock.h"
+#include <dt-bindings/clock/microchip,pfsoc-clock.h>
 / {
 	#address-cells = <2>;
 	#size-cells = <2>;
