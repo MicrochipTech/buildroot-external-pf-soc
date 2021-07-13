@@ -3,7 +3,7 @@
  # Heart Software Services
  #
 ################################################################################
-HART_SOFTWARE_SERVICES_VERSION = 0.99.15
+HART_SOFTWARE_SERVICES_VERSION = 2021.04
 HART_SOFTWARE_SERVICES_SITE = $(call github,polarfire-soc,hart-software-services,$(HART_SOFTWARE_SERVICES_VERSION))
 HART_SOFTWARE_SERVICES_INSTALL_STAGING = NO
 HART_SOFTWARE_SERVICES_INSTALL_TARGET = YES

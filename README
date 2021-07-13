@@ -3,10 +3,11 @@ To build the PolarFire SOC image using this buildroot external tree:
 1. git clone https://github.com/buildroot/buildroot.git -b 2021.02
 2. git clone https://bitbucket.microchip.com/scm/~c41329/buildroot-pf-soc-external.git
 3. cd buildroot-pf-soc-external
-4. make O=$PWD $BR2_EXTERNAL=$PWD -C ../buildroot icicle_defconfig
-5. make
+4. git checkout v2021.04
+5. make O=$PWD $BR2_EXTERNAL=$PWD -C ../buildroot icicle_defconfig
+6. make
 
-When building completes program the image:
+When building completes program the image to the icicle kit:
 
 1. run usbdmsc on the HSS console and determine the enumerated disk
    (i.e sda, sdb, etc.).  Make sure to unmount the disk if it automounts

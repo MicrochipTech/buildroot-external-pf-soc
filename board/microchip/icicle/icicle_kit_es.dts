@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /* Copyright (c) 2019-2020 Microchip Technology Inc */
 /dts-v1/;
-#include <dt-bindings/clock/microchip,pfsoc-clock.h>
+#include <dt-bindings/clock/microchip,mpfs-clock.h>
 / {
 	#address-cells = <2>;
 	#size-cells = <2>;
-	compatible = "SiFive,FU540G-dev", "fu540-dev", "sifive-dev";
-	model = "SiFive,FU540G";
+	compatible = "microchip,mpfs-dev";
+	model = "microchip,mpfs";
 	L45: cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -19,6 +19,8 @@
 			i-cache-size = <16384>;
 			reg = <0>;
 			riscv,isa = "rv64imac";
+			clocks = <&clkcfg CLK_CPU>;
+			operating-points-v2 = <&mpfs_opp_table>;
 			status = "disabled";
 			L4: interrupt-controller {
 				#interrupt-cells = <1>;
@@ -42,6 +44,8 @@
 			mmu-type = "riscv,sv39";
 			reg = <1>;
 			riscv,isa = "rv64imafdc";
+			clocks = <&clkcfg CLK_CPU>;
+			operating-points-v2 = <&mpfs_opp_table>;
 			tlb-split;
 			status = "okay";
 			L9: interrupt-controller {
@@ -66,6 +70,8 @@
 			mmu-type = "riscv,sv39";
 			reg = <2>;
 			riscv,isa = "rv64imafdc";
+			clocks = <&clkcfg CLK_CPU>;
+			operating-points-v2 = <&mpfs_opp_table>;
 			tlb-split;
 			status = "okay";
 			L13: interrupt-controller {
@@ -90,6 +96,8 @@
 			mmu-type = "riscv,sv39";
 			reg = <3>;
 			riscv,isa = "rv64imafdc";
+			clocks = <&clkcfg CLK_CPU>;
+			operating-points-v2 = <&mpfs_opp_table>;
 			tlb-split;
 			status = "okay";
 			L17: interrupt-controller {
@@ -114,6 +122,8 @@
 			mmu-type = "riscv,sv39";
 			reg = <4>;
 			riscv,isa = "rv64imafdc";
+			clocks = <&clkcfg CLK_CPU>;
+			operating-points-v2 = <&mpfs_opp_table>;
 			tlb-split;
 			status = "okay";
 			L21: interrupt-controller {
@@ -123,21 +133,55 @@
 			};
 		};
 	};
+	reserved-memory {
+		ranges;
+		#size-cells = <2>;
+		#address-cells = <2>;
+		fabricbuf0: fabricbuf@0 {
+			compatible = "shared-dma-pool";
+			reg = <0x00 0xae000000 0x0 0x02000000>;
+			label = "fabricbuf0-ddr-c";
+		};
+		fabricbuf1: fabricbuf@1 {
+			compatible = "shared-dma-pool";
+			reg = <0x00 0xc0000000 0x0 0x08000000>;
+			label = "fabricbuf1-ddr-nc";
+		};
+		fabricbuf2: fabricbuf@2 {
+			compatible = "shared-dma-pool";
+			reg = <0x00 0xd8000000 0x0 0x08000000>;
+			label = "fabricbuf2-ddr-nc-wcb";
+		};
+	};
 	L44: soc {
 		#address-cells = <2>;
 		#size-cells = <2>;
-		compatible = "SiFive,FU540G-soc", "fu540-soc", "sifive-soc", "simple-bus";
+		compatible = "microchip,mpfs-soc", "simple-bus";
 		ranges;
+		mpfs_opp_table: opp-table {
+			compatible = "operating-points-v2";
+			opp-shared;
+				opp-600000000 {
+					opp-hz = /bits/ 64 <600000000>;
+				};
+				opp-300000000 {
+					opp-hz = /bits/ 64 <300000000>;
+				};
+				opp-150000000 {
+					opp-hz = /bits/ 64 <150000000>;
+				};
+		};
 		DDRC_CACHE_LO: memory@80000000 {
 			device_type = "memory";
-			reg = <0x0 0x80000000 0x0 0x40000000>;
+			reg = <0x0 0x80000000 0x0 0x2e000000>;
 			clocks = <&clkcfg CLK_DDRC>;
 			status = "okay";
 		};
 		DDRC_CACHE_HI: memory@1040000000 {
 			device_type = "memory";
-			reg = <0x10 0x40000000 0x0 0x40000000>;
+			reg = <0x10 0x00000000 0x0 0x40000000>;
 			clocks = <&clkcfg CLK_DDRC>;
+			status = "okay";
 		};
 		L0: cache-controller@2010000 {
 			compatible = "sifive,fu540-c000-ccache", "cache";
@@ -158,12 +202,36 @@
 			interrupt-controller;
 			interrupts-extended = <&L4 11 &L9 11 &L9 9 &L13 11 &L13 9 &L17 11 &L17 9 &L21 11 &L21 9>;
 		};
-		L27: dma@3000000 {
-			compatible = "sifive,fu540-c000-pdma";
+		pdma: pdma@3000000 {
+			compatible = "microchip,mpfs-pdma-uio";
 			reg = <0x0 0x3000000 0x0 0x8000>;
 			interrupt-parent = <&L1>;
 			interrupts = <5 6 7 8 9 10 11 12>;
 			#dma-cells = <1>;
+		};
+		udmabuf@0 {
+			compatible = "ikwzm,u-dma-buf";
+			device-name = "udmabuf-ddr-c0";
+			minor-number = <0>;
+			size = <0x0 0x02000000>;
+			memory-region = <&fabricbuf0>;
+			sync-mode = <3>;
+		};
+		udmabuf@1 {
+			compatible = "ikwzm,u-dma-buf";
+			device-name = "udmabuf-ddr-nc0";
+			minor-number = <1>;
+			size = <0x0 0x08000000>;
+			memory-region = <&fabricbuf1>;
+			sync-mode = <3>;
+		};
+		udmabuf@2 {
+			compatible = "ikwzm,u-dma-buf";
+			device-name = "udmabuf-ddr-nc-wcb0";
+			minor-number = <2>;
+			size = <0x0 0x08000000>;
+			memory-region = <&fabricbuf2>;
+			sync-mode = <3>;
 		};
 		refclk: refclk {
 			compatible = "fixed-clock";
@@ -172,17 +240,27 @@
 			clock-output-names = "msspllclk";
 		};
 		clkcfg: clkcfg@20002000 {
-			compatible = "microchip,pfsoc-clkcfg";
+			compatible = "microchip,mpfs-clkcfg";
 			reg = <0x0 0x20002000 0x0 0x1000>;
 			reg-names = "mss_sysreg";
 			clocks = <&refclk>;
 			#clock-cells = <1>;
 			clock-output-names = "cpu", "axi", "ahb", "envm", "mac0", "mac1", "mmc",
-					     "timer", "uart0", "uart1", "uart2", "uart3", "uart4",
-					     "spi0", "spi1", "i2c0", "i2c1", "can0", "can1", "usb",
-					     "rsvd", "rtc", "qspi", "gpio0", "gpio1", "gpio2",
-					     "ddrc", "fic0", "fic1", "fic2", "fic3", "athena",
-					     "cfm";
+						"timer", "uart0", "uart1", "uart2", "uart3", "uart4",
+						"spi0", "spi1", "i2c0", "i2c1", "can0", "can1", "usb",
+						"rsvd", "rtc", "qspi", "gpio0", "gpio1", "gpio2",
+						"ddrc", "fic0", "fic1", "fic2", "fic3", "athena",
+						"cfm";
+		};
+		rtc: rtc@20124000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "microchip,mpfs-rtc";
+			reg = <0x0 0x20124000 0x0 0x1000>;
+			interrupt-parent = <&L1>;
+			interrupts = <80 81>;
+			clocks = <&clkcfg CLK_RTC>;
+			clock-names = "rtc";
 		};
 		serial0: serial@20000000 {
 			compatible = "ns16550a";
@@ -237,49 +315,43 @@
 			clocks = <&clkcfg CLK_MMC>;
 			bus-width = <4>;
 			cap-mmc-highspeed;
-			mmc-ddr-3_3v; 
-			max-frequency = <200000000>;
-			non-removable;
-			no-sd;
-			no-sdio;
-			voltage-ranges = <3300 3300>;
-			status = "okay";
-		};
-	sdcard: sd@20008000 {
-			compatible = "cdns,sd4hc";
-			reg = <0x0 0x20008000 0x0 0x1000>;
-			interrupt-parent = <&L1>;
-			interrupts = <88>;
-			pinctrl-names = "default";
-			clocks = <&clkcfg CLK_MMC>;         
-			bus-width = <4>;
-			disable-wp;
-			no-1-8-v;
-			cap-mmc-highspeed;
 			cap-sd-highspeed;
-			card-detect-delay = <200>;
-			sd-uhs-sdr12;
-			sd-uhs-sdr25;
-			sd-uhs-sdr50;
-			sd-uhs-sdr104;  
+			no-1-8-v;
+			disable-wp;
 			max-frequency = <200000000>;
-			status = "disabled";     
+			status = "okay";
 		};
 		emac1: ethernet@20112000 {
 			compatible = "cdns,macb";
 			reg = <0x0 0x20112000 0x0 0x2000>;
 			interrupt-parent = <&L1>;
 			interrupts = <70 71 72 73>;
-			mac-address = [00 04 A3 00 FC 00];
+			mac-address = [56 34 12 00 FC 01];
 			phy-mode = "sgmii";
 			clocks = <&clkcfg CLK_MAC1>, <&clkcfg CLK_AHB>;
 			clock-names = "pclk", "hclk";
 			#address-cells = <1>;
 			#size-cells = <0>;
+			phy-handle = <&phy1>;
 			phy1: ethernet-phy@9 {
 				reg = <9>;
 				ti,fifo-depth = <0x01>;
 			};
+			phy0: ethernet-phy@8 {
+				reg = <8>;
+				ti,fifo-depth = <0x01>;
+			};
+		};
+		emac0: ethernet@20110000 {
+			compatible = "cdns,macb";
+			reg = <0x0 0x20110000 0x0 0x2000>;
+			interrupt-parent = <&L1>;
+			interrupts = <64 65 66 67>;
+			mac-address = [56 34 12 00 FC 02];
+			phy-mode = "sgmii";
+			clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
+			clock-names = "pclk", "hclk";
+			phy-handle = <&phy0>;
 		};
 		pcie: pcie@70000000 {
 			#address-cells = <0x3>;
@@ -373,16 +445,16 @@
 			clocks = <&clkcfg CLK_CAN0>;
 			status = "okay";
 		};
-		uio_lsram: uio_lpddr4@0xC0000000 {
+		fpgalsram: fpga_lsram@0x61000000 {
 			compatible = "generic-uio";
 			reg = < 0x0 0x61000000 0x0 0x00010000
 					0x14 0x00000000 0x0 0x00010000 >;
 			status = "okay";
 		};
-		dma: dma@0x60020000 {
+		fpgadma: dma@0x60020000 {
 			#address-cells = <1>;
 			#size-cells = <0>;
-			compatible = "microsemi,ms-pf-mss-dma-uio";
+			compatible = "microchip,mpfs-fpga-dma-uio";
 			reg = <0x00 0x60020000 0x0 0x1000>;
 			interrupt-parent = <&L1>;
 			interrupts = <120>;
@@ -390,39 +462,53 @@
 		};
 	};
 
-    mbox: mailbox@37020000 {
-        compatible = "microchip,polarfire-soc-mailbox";
-        reg = <0x0 0x37020000 0x0 0x1000>, <0x0 0x2000318C 0x0 0x40>;
-        interrupt-parent = <&L1>;
-        interrupts = <96>;		
-        #mbox-cells = <1>;
-    };
-    
-    syscontroller: syscontroller {
-        compatible = "microchip,polarfire-soc-sys-controller";
-        #address-cells = <1>;
-        #size-cells = <1>;
-        mboxes = <&mbox 0>;
-    };
+	mbox: mailbox@37020000 {
+		compatible = "microchip,polarfire-soc-mailbox";
+		reg = <0x0 0x37020000 0x0 0x1000>, <0x0 0x2000318C 0x0 0x40>;
+		interrupt-parent = <&L1>;
+		interrupts = <96>;
+		#mbox-cells = <1>;
+	};
 
-    hwrandom: hwrandom {
-        compatible = "microchip,polarfire-soc-rng";
-        #address-cells = <1>;
-        #size-cells = <1>;
-        syscontroller = <&syscontroller>;
-    };
+	syscontroller: syscontroller {
+		compatible = "microchip,polarfire-soc-sys-controller";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		mboxes = <&mbox 0>;
+	};
 
-    serialnum: serialnum {
-        compatible = "microchip,polarfire-soc-serial-number";
-        #address-cells = <1>;
-        #size-cells = <1>;
-        syscontroller = <&syscontroller>;
-    };
+	hwrandom: hwrandom {
+		compatible = "microchip,polarfire-soc-rng";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		syscontroller = <&syscontroller>;
+	};
 
-    fpgadigest: fpgadigest {
-        compatible = "microchip,polarfire-soc-digest";
-        #address-cells = <1>;
-        #size-cells = <1>;
-        syscontroller = <&syscontroller>;
-    };
+	serialnum: serialnum {
+		compatible = "microchip,polarfire-soc-serial-number";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		syscontroller = <&syscontroller>;
+	};
+
+	fpgadigest: fpgadigest {
+		compatible = "microchip,polarfire-soc-digest";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		syscontroller = <&syscontroller>;
+	};
+
+	devicecert: cert {
+		compatible = "microchip,polarfire-soc-device-cert";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		syscontroller = <&syscontroller>;
+	};
+
+	signature: signature {
+		compatible = "microchip,polarfire-soc-signature";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		syscontroller = <&syscontroller>;
+	};
 };

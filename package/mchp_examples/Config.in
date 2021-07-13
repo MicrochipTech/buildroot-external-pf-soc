@@ -1,0 +1,5 @@
+config BR2_PACKAGE_MCHP_EXAMPLES
+	bool "mchp_examples"
+	help
+	  blah blah blah
+	  

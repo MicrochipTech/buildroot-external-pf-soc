@@ -1,13 +1,13 @@
-From 52819b238fa11fc45288845b53bd2e6ac2220400 Mon Sep 17 00:00:00 2001
+From 3cd220cf80d0da13b90c105df8e0e9a19cd8831e Mon Sep 17 00:00:00 2001
 From: Conor Dooley <conor.dooley@microchip.com>
 Date: Tue, 1 Dec 2020 11:22:16 +0000
-Subject: [PATCH 1/2] rng: add support for rng on the polarfire soc
+Subject: [PATCH 6/8] rng: add support for rng on the polarfire soc
 
 ---
  drivers/char/hw_random/Kconfig    |  13 +++
  drivers/char/hw_random/Makefile   |   1 +
- drivers/char/hw_random/mpfs-rng.c | 130 ++++++++++++++++++++++++++++++
- 3 files changed, 144 insertions(+)
+ drivers/char/hw_random/mpfs-rng.c | 133 ++++++++++++++++++++++++++++++
+ 3 files changed, 147 insertions(+)
  create mode 100644 drivers/char/hw_random/mpfs-rng.c
 
 diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
@@ -47,10 +47,10 @@ index a7801b49ce6c..462ebc254c6a 100644
 \ No newline at end of file
 diff --git a/drivers/char/hw_random/mpfs-rng.c b/drivers/char/hw_random/mpfs-rng.c
 new file mode 100644
-index 000000000000..ef0620b1ffb9
+index 000000000000..cc6a04f310a2
 --- /dev/null
 +++ b/drivers/char/hw_random/mpfs-rng.c
-@@ -0,0 +1,130 @@
+@@ -0,0 +1,133 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Microchip PolarFire SoC (MPFS) hardware random driver
@@ -88,18 +88,22 @@ index 000000000000..ef0620b1ffb9
 +	u32 max_words = max / sizeof(u32);
 +	u32 num_words_rx = 0;
 +	u32 num_requests;
-+	u32 response[RESP_SIZE];
++	u32 response_msg[RESP_SIZE];
 +	u16 i;
 +	u16 copy_size_bytes;
 +	int ret;
-+	struct mpfs_mss_msg msg = {
-+		.cmd_opcode = CMD_OPCODE,
-+		.cmd_data_size = CMD_DATA_SIZE,
-+		.response_size = RESP_SIZE,
-+		.cmd_data = CMD_DATA,
-+		.mailbox_offset = MBOX_OFFSET,
-+		.response_offset = RESP_OFFSET
-+		};
++
++	struct mpfs_mss_response response = {
++		.resp_status = 0U,
++		.resp_msg = (u32 *)response_msg,
++		.resp_size = RNG_RESP_BYTES
++	};
++	struct mpfs_mss_msg msg = { .cmd_opcode = CMD_OPCODE,
++				    .cmd_data_size = CMD_DATA_SIZE,
++				    .response = &response,
++				    .cmd_data = CMD_DATA,
++				    .mbox_offset = MBOX_OFFSET,
++				    .resp_offset = RESP_OFFSET };
 +
 +	if (!max)
 +		return 0;
@@ -107,15 +111,14 @@ index 000000000000..ef0620b1ffb9
 +	num_requests = 1 + (max_words - 1) / RESP_SIZE;
 +
 +	for (i = 0; i < num_requests; i++) {
-+		ret = mpfs_blocking_transaction(rng_priv->sys_controller, &msg,
-+						 response, RNG_RESP_BYTES);
++		ret = mpfs_blocking_transaction(rng_priv->sys_controller, &msg);
 +		if (ret)
 +			return ret;
 +
 +		num_words_rx += RESP_SIZE;
 +		copy_size_bytes = RNG_RESP_BYTES - check_excess_response(num_words_rx, max_words);
 +
-+		memcpy((u32 *)buf + i * RESP_SIZE, response, copy_size_bytes);
++		memcpy((u32 *)buf + i * RESP_SIZE, response_msg, copy_size_bytes);
 +	}
 +
 +	return num_words_rx * sizeof(u32);
