@@ -1,0 +1,27 @@
+config BR2_PACKAGE_DT_OVERLAY_PF_SOC
+	bool "PolarFire SOC DT overlay and FIT image"
+	help
+	  Generate a FIT image and overlays for the Microchip
+	  PolarFire SOC platform.
+
+if BR2_PACKAGE_DT_OVERLAY_PF_SOC
+
+config BR2_PACKAGE_DT_OVERLAY_PF_SOC_PLATFORM
+	string "platform name"
+	help
+	  Available platforms are: icicle_kit_es
+
+choice
+	prompt "output"
+	default BR2_PACKAGE_DT_OVERLAY_PF_SOC_FIT
+	help
+	  Build only the device tree overlays or build them and embed
+	  them in a FIT image.
+
+config BR2_PACKAGE_DT_OVERLAY_PF_SOC_FIT
+	bool "FIT Image"
+
+config BR2_PACKAGE_DT_OVERLAY_PF_SOC_ONLY
+	bool "dtbos only"
+endchoice
+endif

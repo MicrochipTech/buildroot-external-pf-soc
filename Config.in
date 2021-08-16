@@ -1,4 +1,4 @@
 source "$BR2_EXTERNAL_ICICLE_PATH/package/hart-software-services/Config.in.host"
-source "$BR2_EXTERNAL_ICICLE_PATH/package/polarfire-soc-fit-image/Config.in"
+source "$BR2_EXTERNAL_ICICLE_PATH/package/dt-overlay-pf-soc/Config.in"
 source "$BR2_EXTERNAL_ICICLE_PATH/package/mchp_examples/Config.in"
 
