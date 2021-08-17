@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-DT_OVERLAY_PF_SOC_VERSION = 2021.04
+DT_OVERLAY_PF_SOC_VERSION = v2021.04
 DT_OVERLAY_PF_SOC_SITE_METHOD = git
-DT_OVERLAY_PF_SOC_SITE = https://bitbucket.microchip.com/scm/~c41329/dt-overlay-pf-soc.git
+DT_OVERLAY_PF_SOC_SITE = https://github.com/MicrochipTech/dt-overlay-pf-soc.git
 DT_OVERLAY_PF_SOC_LICENSE = GPL-2.0 MIT
 DT_OVERLAY_PF_SOC_LICENSE_FILES = COPYING LICENSES/GPL-2.0 LICENSES/MIT
 DT_OVERLAY_PF_SOC_DEPENDENCIES = linux host-uboot-tools
