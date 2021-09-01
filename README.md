@@ -12,7 +12,7 @@ To build this external tree:
 
 ```sh
 git clone https://github.com/buildroot/buildroot.git -b 2021.02
-git clone https://bitbucket.microchip.com/scm/~c41329/buildroot-pf-soc-external.git
+git clone https://github.com/MicrochipTech/buildroot-external-pf-soc.git
 cd buildroot-pf-soc-external
 git checkout v2021.04
 make O=$PWD BR2_EXTERNAL=$PWD -C ../buildroot icicle_defconfig
