@@ -1,5 +1,6 @@
 config BR2_PACKAGE_HOST_HART_SOFTWARE_SERVICES
 	bool "Hart Software Services"
+	imply BR2_PACKAGE_AMP_EXAMPLES
 	help
 	  Microchip Hart Software Services package for
 	  PolarFire SOC.

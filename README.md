@@ -11,17 +11,22 @@ It is based on the recommended buildroot [![external tree structure]()](https://
 To build this external tree:
 
 ```sh
-git clone https://github.com/buildroot/buildroot.git -b 2021.02
-git clone https://github.com/MicrochipTech/buildroot-external-pf-soc.git
-cd buildroot-pf-soc-external
-git checkout v2021.04
+git clone https://github.com/buildroot/buildroot.git -b 2021.11
+git clone https://github.com/MicrochipTech/buildroot-external-pf-soc.git -b v2021.11
+cd buildroot-external-pf-soc
+
+For Standard Linux
 make O=$PWD BR2_EXTERNAL=$PWD -C ../buildroot icicle_defconfig
+
+For AMP
+make O=$PWD BR2_EXTERNAL=$PWD -C ../buildroot icicle_amp_defconfig
 make
 ```
 
 ## Installation
 
 Connect a USB cable to J11.  The first enumerated port is the HSS console and the second port is the Linux console
+For the AMP demo, the freeRTOS console port is the last enumerated port.
 Connect a USB cable to J16 for transferring the Linux image
 Power cycle the board and halt the hss boot console by pressing a key
 type usbdmsc on the HSS console and hit enter

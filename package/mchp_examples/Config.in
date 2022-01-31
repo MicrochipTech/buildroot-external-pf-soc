@@ -1,5 +1,7 @@
 config BR2_PACKAGE_MCHP_EXAMPLES
 	bool "mchp_examples"
+	depends on BR2_PACKAGE_LIBOPENSSL
+	depends on BR2_PACKAGE_LIBGPIOD
 	help
 	  blah blah blah
-	  
+

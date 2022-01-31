@@ -1,0 +1,13 @@
+diff --git a/mpfs-rpmsg-freertos/Makefile b/mpfs-rpmsg-freertos/Makefile
+index a2528f9..3ecb56b 100644
+--- a/mpfs-rpmsg-freertos/Makefile
++++ b/mpfs-rpmsg-freertos/Makefile
+@@ -87,6 +87,8 @@ ifneq ($(MAKECMDGOALS), clean)
+ -include $(DEPENDENCIES)
+ endif
+ 
++CFLAGS+=-fno-stack-protector
++
+ $(RISCV_TARGET): $(OBJS)  $(DEPENDENCIES) $(LINKER_SCRIPT)
+ 	@$(ECHO) " LD    $@";
+ 	$(CMD_PREFIX)$(CC) -T $(LINKER_SCRIPT) -static -nostdlib -nostartfiles -nodefaultlibs -Wl,-Map=$(BINDIR)/output.map -Wl,--gc-sections -o $(BINDIR)/$@ $(OBJS)

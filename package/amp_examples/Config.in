@@ -1,0 +1,5 @@
+config BR2_PACKAGE_AMP_EXAMPLES
+	bool "build AMP example"
+	help
+	  Build the AMP freeRTOS binary to be
+	  included in the HSS payload.bin

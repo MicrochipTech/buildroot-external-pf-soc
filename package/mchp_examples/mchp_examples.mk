@@ -3,13 +3,15 @@
  # Microchip Examples
  #
 ################################################################################
-MCHP_EXAMPLES_VERSION = a6a6ddb437b6de24ddd195d60713a78c1c5dd8e3
+MCHP_EXAMPLES_VERSION = 91aa8b53f3a50c5dfd85a48feff36a5815fe5f49
 MCHP_EXAMPLES_SITE = https://github.com/polarfire-soc/polarfire-soc-linux-examples.git
 MCHP_EXAMPLES_SITE_METHOD = git
+MCHP_EXAMPLES_LICENSE = MIT
+MCHP_EXAMPLES_LICENSE_FILES = LICENSE
 
 
-EXAMPLE_DIRS += can gpio system-services ethernet fpga-fabric-interfaces dma pdma
-EXAMPLE_FILES += can/uio-can-example gpio/led-blinky system-services/system-services-example fpga-fabric-interfaces/lsram/uio-lsram-read-write dma/uio-dma-interrupt pdma/pdma-ex
+EXAMPLE_DIRS += amp can gpio system-services ethernet fpga-fabric-interfaces dma pdma
+EXAMPLE_FILES += amp/rpmsg-pingpong/rpmsg-pingpong amp/rpmsg-tty-example/rpmsg-tty can/uio-can-example gpio/gpiod-test gpio/gpio-event system-services/system-services-example system-services/signature-verification-demo fpga-fabric-interfaces/lsram/uio-lsram-read-write dma/uio-dma-interrupt pdma/pdma-ex
 EXAMPLE_TARGET_DIR = /opt/microchip/
 
 define MCHP_EXAMPLES_INSTALL_DIRS
@@ -29,7 +31,7 @@ define MCHP_EXAMPLES_INSTALL_TARGET_CMDS
 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(dir $(example_file)) $(notdir $(example_file)) CC=$(TARGET_CC); \
                 $(INSTALL) -D -m 775 $(@D)/$(example_file) $(TARGET_DIR)$(EXAMPLE_TARGET_DIR)/$(dir $(example_file));)
 
-	ln -s $(EXAMPLE_TARGET_DIR)/ethernet/iio-http-server  $(TARGET_DIR)$(EXAMPLE_TARGET_DIR)/iiohttpserver
+	ln -sf $(EXAMPLE_TARGET_DIR)/ethernet/iio-http-server  $(TARGET_DIR)$(EXAMPLE_TARGET_DIR)/iiohttpserver
 
 endef
 

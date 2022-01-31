@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-DT_OVERLAY_PF_SOC_VERSION = v2021.04
+DT_OVERLAY_PF_SOC_VERSION = v2021.11
 DT_OVERLAY_PF_SOC_SITE_METHOD = git
 DT_OVERLAY_PF_SOC_SITE = https://github.com/MicrochipTech/dt-overlay-pf-soc.git
 DT_OVERLAY_PF_SOC_LICENSE = GPL-2.0 MIT

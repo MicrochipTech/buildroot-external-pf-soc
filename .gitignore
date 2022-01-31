@@ -9,4 +9,5 @@ images/
 staging
 target/
 .config.old
+local.mk
 
