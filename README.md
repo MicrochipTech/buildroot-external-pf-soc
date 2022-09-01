@@ -1,8 +1,8 @@
 # Microchip PolarFire SOC buildroot external tree
 ## [![Microchip's polarfire-soc-buildroot-sdk](https://www.microsemi.com/images/soc/products/PolarFire_SoC/IC-MCRSM-1Pin-POLARFIRE-SOC-FPGA-straight.png)](https://www.microsemi.com/product-directory/soc-fpgas/5498-polarfire-soc-fpga)
 
-This repository is a buildroot external tree to support the Microchip PolarFire SOC RISC-V FPGA.
-It is based on the recommended buildroot [![external tree structure]()](https://buildroot.org/downloads/manual/manual.html#customize-dir-structure) and a stripped-down version of the original Microchip PolarFire SOC Buildroot sdk [![repository]()](https://github.com/polarfire-soc/polarfire-soc-buildroot-sdk).
+
+## This repository is now deprecated and archived.  PolarFire SOC support has been integrated in [![buildroot-external-microchip]()](https://github.com/linux4microchip/buildroot-external-microchip).
 
 ## Supported evalution kits
 - [MPFS-ICICLE-KIT-ES](https://www.microsemi.com/existing-parts/parts/152514)
